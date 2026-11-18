@@ -1,0 +1,27 @@
+{
+  "name": "Hatama · Fourth Meridian Games",
+  "short_name": "Hatama",
+  "description": "Guess the five-letter Batak Toba word in five tries, then see what it means. Endless: every round is a new word.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#1b1214",
+  "theme_color": "#1b1214",
+  "icons": [
+    {
+      "src": "icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    },
+    {
+      "src": "favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}

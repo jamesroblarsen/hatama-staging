@@ -1,0 +1,149 @@
+:root {
+  --bg: #1b1214;
+  --panel: #2a1c1f;
+  --ink: #f3e9dc;
+  --muted: #b9a89a;
+  --line: #4a3438;
+  --correct: #b8322a;   /* ulos red */
+  --present: #d4a017;   /* gold thread */
+  --absent: #3b3133;
+  --key: #5a4649;
+  /* tiles shrink with screen width and, on short screens, with height so the keyboard stays visible */
+  --tile: min(15vw, 3.6rem, calc((100dvh - 360px) / 5));
+  --gutter-l: max(16px, env(safe-area-inset-left, 0px));
+  --gutter-r: max(16px, env(safe-area-inset-right, 0px));
+  font-family: "Segoe UI", system-ui, -apple-system, Roboto, sans-serif;
+  color-scheme: dark;   /* one deliberate look: woven ulos colours on dark */
+}
+
+* { box-sizing: border-box; }
+
+html { height: 100%; background: var(--bg); }
+body {
+  margin: 0; min-height: 100%; display: flex; flex-direction: column;
+  background: var(--bg); color: var(--ink);
+  padding-left: var(--gutter-l); padding-right: var(--gutter-r);
+}
+
+button {
+  font: inherit; color: inherit; cursor: pointer;
+  touch-action: manipulation;              /* no double-tap zoom when tapping keys fast */
+  -webkit-tap-highlight-color: transparent;
+}
+.board, .keyboard { -webkit-user-select: none; user-select: none; }
+
+.top {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  padding-block: 12px 10px; max-width: 560px; width: 100%; margin: 0 auto;
+}
+.brand h1 { margin: 0; font-size: 1.7rem; letter-spacing: 0.12em; text-transform: uppercase; }
+.tag { margin: 0; font-size: 0.78rem; color: var(--muted); }
+.actions { display: flex; gap: 6px; align-items: center; }
+.ghost, .icon {
+  background: transparent; border: 1px solid var(--line); border-radius: 8px; padding: 6px 10px; font-size: 0.85rem;
+}
+.ghost:hover, .icon:hover { border-color: var(--muted); }
+.icon { width: 34px; padding: 6px 0; font-weight: 700; }
+.brand { min-width: 0; }
+.actions { flex-shrink: 0; }
+
+/* woven band under the header */
+.ulos {
+  height: 8px;
+  margin-left: calc(-1 * var(--gutter-l)); margin-right: calc(-1 * var(--gutter-r));
+  background:
+    repeating-linear-gradient(90deg, var(--correct) 0 14px, var(--ink) 14px 16px, #111 16px 22px, var(--present) 22px 24px, #111 24px 30px);
+  opacity: 0.85;
+}
+
+main {
+  flex: 1; display: flex; flex-direction: column; align-items: center; gap: 14px;
+  padding-block: 18px 24px; max-width: 560px; width: 100%; margin: 0 auto;
+}
+
+.board { display: grid; grid-template-rows: repeat(5, var(--tile)); gap: 6px; }
+.row { display: grid; grid-template-columns: repeat(5, var(--tile)); gap: 6px; }
+.row.shake { animation: shake 0.4s; }
+
+.tile {
+  width: var(--tile); height: var(--tile);
+  display: grid; place-items: center;
+  border: 2px solid var(--line); border-radius: 6px;
+  font-size: calc(var(--tile) * 0.5); font-weight: 700; text-transform: uppercase;
+  user-select: none;
+}
+.tile.filled { border-color: var(--muted); animation: pop 0.1s; }
+.tile.correct, .tile.present, .tile.absent { border-color: transparent; color: #fff; }
+.tile.correct { background: var(--correct); }
+.tile.present { background: var(--present); color: #1b1214; }
+.tile.absent { background: var(--absent); }
+.tile.reveal { animation: flip 0.45s ease both; }
+.tile.win { animation: hop 0.5s ease both; }
+
+.tile.mini { width: 1.7rem; height: 1.7rem; font-size: 0.9rem; display: inline-grid; border-radius: 4px; margin-right: 8px; }
+
+.toast {
+  min-height: 1.6rem; font-size: 0.9rem; color: var(--bg); background: transparent; padding: 0 12px; border-radius: 6px;
+  display: grid; place-items: center;
+}
+.toast.show { background: var(--ink); }
+
+.result {
+  width: 100%; background: var(--panel); border: 1px solid var(--line); border-radius: 12px;
+  padding: 14px 16px; text-align: center;
+}
+.result-head { margin: 0; color: var(--muted); font-size: 0.9rem; }
+.answer { margin: 4px 0; font-size: 1.9rem; font-weight: 800; letter-spacing: 0.2em; text-transform: uppercase; }
+.meaning { margin: 2px 0; font-size: 1.05rem; }
+.meaning.id { color: var(--muted); font-size: 0.92rem; font-style: italic; }
+.result .primary { margin-top: 12px; }
+
+.primary {
+  background: var(--correct); border: none; border-radius: 8px; padding: 10px 22px; font-weight: 700; color: #fff;
+}
+.primary:hover { filter: brightness(1.1); }
+
+.keyboard[hidden] { display: none; }
+.keyboard { display: flex; flex-direction: column; gap: 6px; width: 100%; user-select: none; }
+.krow { display: flex; gap: 5px; justify-content: center; }
+.key {
+  flex: 1; max-width: 46px; height: 54px; border: none; border-radius: 6px; background: var(--key);
+  font-weight: 700; text-transform: uppercase; font-size: 0.95rem; padding: 0;
+}
+.key.wide { max-width: 72px; flex: 1.5; font-size: 0.72rem; }
+.key.loan { opacity: 0.4; }
+.key.correct { background: var(--correct); }
+.key.present { background: var(--present); color: #1b1214; }
+.key.absent { background: var(--absent); opacity: 0.55; }
+
+.stats { margin: 0; font-size: 0.8rem; color: var(--muted); text-align: center; }
+
+dialog {
+  background: var(--panel); color: var(--ink); border: 1px solid var(--line); border-radius: 12px;
+  max-width: min(92vw, 440px); padding: 18px 20px;
+}
+dialog::backdrop { background: rgba(0, 0, 0, 0.6); }
+dialog h2 { margin-top: 0; }
+.legend { list-style: none; padding: 0; }
+.legend li { display: flex; align-items: center; margin: 6px 0; }
+.small { font-size: 0.78rem; color: var(--muted); }
+
+@keyframes pop { 50% { transform: scale(1.08); } }
+@keyframes shake { 20%, 60% { transform: translateX(-6px); } 40%, 80% { transform: translateX(6px); } }
+@keyframes flip { 0% { transform: rotateX(90deg); } 100% { transform: rotateX(0); } }
+@keyframes hop { 40% { transform: translateY(-10px); } }
+
+@media (prefers-reduced-motion: reduce) {
+  .tile, .row { animation: none !important; }
+}
+
+/* phones: keep the header on one row and everything on one screen (kept last so it wins the cascade) */
+@media (max-width: 420px) {
+  .top { gap: 8px; padding-block: 8px 6px; }
+  .brand h1 { font-size: 1.3rem; }
+  .tag { font-size: 0.68rem; }
+  .ghost { padding: 5px 8px; font-size: 0.8rem; }
+  .icon { width: 30px; padding: 5px 0; }
+  main { gap: 10px; padding-block: 12px; }
+  .key { height: 50px; }
+}
